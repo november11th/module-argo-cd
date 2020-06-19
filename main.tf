@@ -2,7 +2,11 @@ provider "kubernetes" {
   config_path = "kubeconfig"
 }
 
-provider "helm" {}
+provider "helm" {
+  kubernetes {
+    config_path = "kubeconfig"
+  }
+}
 
 resource "kubernetes_namespace" "argo-ns" {
   metadata {
