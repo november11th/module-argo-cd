@@ -19,4 +19,7 @@ resource "helm_release" "argocd" {
   chart      = "argo-cd"
   repository = "https://argoproj.github.io/argo-helm"
   namespace  = "argocd"
+
+  # Adding a depends_on ensures that the argo helm package will be uninstalled before the EKS cluster is removed.  
+  depends_on = [var.kubernetes_cluster_id]
 }
