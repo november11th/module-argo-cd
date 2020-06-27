@@ -1,9 +1,15 @@
 provider "kubernetes" {
-  config_path = "kubeconfig"
+  load_config_file       = false
+  cluster_ca_certificate = base64decode(var.kubernetes_cluster_cert_data)
+  host                   = var.kubernetes_cluster_endpoint
+  exec {
+    api_version = "client.authentication.k8s.io/v1alpha1"
+    command     = "aws-iam-authenticator"
+    args        = ["token", "-i", "${var.kubernetes_cluster_name}"]
+  }
+
 }
 
-# This isn't working at the moment because the kubeconfig file is not available
-# We may need to pass all of the kube context and avoid using the file
 provider "helm" {
   kubernetes {
     load_config_file       = false
@@ -33,5 +39,5 @@ resource "helm_release" "argocd" {
   namespace  = "argocd"
 
   # Don't install until the EKS cluser nodegroup has started
-  depends_on = [var.eks_nodegroup_id]
+  depends_on = [kubernetes_namespace.argo-ns]
 }
