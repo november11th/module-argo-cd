@@ -2,6 +2,8 @@ provider "kubernetes" {
   config_path = "kubeconfig"
 }
 
+# This isn't working at the moment because the kubeconfig file is not available
+# We may need to pass all of the kube context and avoid using the file
 provider "helm" {
   kubernetes {
     config_path = "kubeconfig"
