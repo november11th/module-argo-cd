@@ -24,9 +24,7 @@ provider "helm" {
 }
 
 resource "kubernetes_namespace" "argo-ns" {
-  # Don't setup the namespace until the EKS cluser nodegroup has started  
-  depends_on = [var.eks_nodegroup_id]
-
+  
   metadata {
     name = "argocd"
   }
